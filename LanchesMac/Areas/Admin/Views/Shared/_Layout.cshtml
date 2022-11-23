@@ -20,23 +20,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @await Component.InvokeAsync("CategoriaMenu")
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Contato" asp-action="Index">Contato</a>
+                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <form class="navbar-form navbar-right" asp-controller="Lanche" asp-action="Search" method="get">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Procurar produto" name="searchString" value="@ViewData["searchString"]" />
-                                </div>
-                            </form>
+                            <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminLanches" asp-action="Index">Produtos</a>
                         </li>
-                        @await Component.InvokeAsync("CarrinhoCompraResumo")
-                    </ul>
-                    <ul>
-                        @await Html.PartialAsync("_LoginPartial")
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminCategorias" asp-action="Index">Categorias</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminPedidos" asp-action="Index">Pedidos</a>
+                        </li>
                     </ul>
                 </div>
             </div>
