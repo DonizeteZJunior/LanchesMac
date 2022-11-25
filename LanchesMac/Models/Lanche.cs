@@ -11,7 +11,8 @@ namespace LanchesMac.Models
 
         [Required (ErrorMessage = "O nome do lanche deve ser informado")]
         [Display(Name = "Nome do Lanche")]
-        [StringLength(80, MinimumLength = 10, ErrorMessage = "O {0} deve ter no mínimo {1] e no máximo {2} ")]
+        [MinLength(10, ErrorMessage = "Nome deve ter no mínimo {1} caracteres")]
+        [MaxLength(80, ErrorMessage = "Nome não pode exceder {1} caracteres")]
         public string Nome { get; set; }
 
         [Required (ErrorMessage = "A descrição do lanche deve ser informada")]

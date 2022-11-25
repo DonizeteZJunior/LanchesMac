@@ -1,0 +1,71 @@
+﻿@model IEnumerable<LanchesMac.Models.Lanche>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de Produtos</h1>
+
+<p>
+    <button class="btn btn-primary"><a asp-action="Create" class="text-decoration-none text-light" >+ Cadastrar</a></button>
+</p>
+<table class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.DescricaoCurta)
+            </th scope="col">
+            <th>
+                @Html.DisplayNameFor(model => model.DescricaoDetalhada)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Preco)
+            </th>
+            <th scope="col" class="text-center">
+                @Html.DisplayNameFor(model => model.IsLanchePreferido)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.EmEstoque)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Categoria)
+            </th>
+            <th scope="col">Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescricaoCurta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescricaoDetalhada)
+            </td>
+            <td class="text-end">
+                @Html.DisplayFor(modelItem => item.Preco)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.IsLanchePreferido)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.EmEstoque)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Categoria.CategoriaNome)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LancheId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.LancheId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.LancheId">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

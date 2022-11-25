@@ -2,8 +2,10 @@
 using LanchesMac.Models;
 using LanchesMac.Repositories;
 using LanchesMac.Repositories.Interfaces;
+using LanchesMac.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
 
 namespace LanchesMac;
 public class Startup
@@ -39,16 +41,31 @@ public class Startup
         services.AddTransient<ILancheRepository, LancheRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
         services.AddTransient<IPedidoRepository, PedidoRepository>();
+        services.AddScoped<ISeedUserRoInitial, SeedUserRoInitial>();
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin",
+                politica =>
+                {
+                    politica.RequireRole("Admin");
+                });
+        });
+
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
 
         services.AddControllersWithViews();
+        services.AddPaging(options => {
+            options.ViewName = "Bootstrap5";
+            options.PageParameterName = "pageindex";
+        });
         services.AddMemoryCache();
         services.AddSession();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISeedUserRoInitial seed)
     {
         if (env.IsDevelopment())
         {
@@ -64,6 +81,12 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+
+        //cria os perfis
+        seed.SeedRoles();
+        //crios os usuários e atribui ao perfil
+        seed.SeedUsers();
+
         app.UseAuthentication();
         app.UseSession();
         app.UseAuthorization();

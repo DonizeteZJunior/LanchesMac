@@ -1,4 +1,5 @@
 ﻿using LanchesMac.ViewsModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace LanchesMac.Controllers
             _signInManager = signInManager;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
@@ -24,6 +26,7 @@ namespace LanchesMac.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
@@ -48,11 +51,13 @@ namespace LanchesMac.Controllers
             return View(loginVM);
         }
 
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel registroVM)
@@ -64,6 +69,7 @@ namespace LanchesMac.Controllers
 
                 if(result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Member");
                     return RedirectToAction("Login", "Account");
                 }
                 else
@@ -74,6 +80,7 @@ namespace LanchesMac.Controllers
             return View(registroVM);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -81,6 +88,11 @@ namespace LanchesMac.Controllers
             HttpContext.User = null;
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index","Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
