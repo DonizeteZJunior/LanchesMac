@@ -10,6 +10,7 @@ using LanchesMac.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using ReflectionIT.Mvc.Paging;
+using LanchesMac.ViewsModels;
 
 namespace LanchesMac.Areas.Admin.Controllers
 {
@@ -24,12 +25,33 @@ namespace LanchesMac.Areas.Admin.Controllers
             _context = context;
         }
 
+        public IActionResult PedidoLanches(int? id)
+        {
+            var pedido = _context.Pedidos
+                .Include(pd => pd.PedidoItens)
+                .ThenInclude(l => l.Lanche)
+                .FirstOrDefault(p => p.PedidoId == id);
+
+            if (pedido == null)
+            {
+                Response.StatusCode = 404;
+                return View("Pedido Not Found", id.Value);
+            }
+
+            PedidoLancheViewModel pedidoLanches = new PedidoLancheViewModel()
+            {
+                Pedido = pedido,
+                PedidoDetalhes = pedido.PedidoItens
+            };
+            return View(pedidoLanches);
+        }
+
         // GET: Admin/AdminPedidos
         //public async Task<IActionResult> Index()
         //{
         //      return View(await _context.Pedidos.ToListAsync());
         //}
-        public async Task<IActionResult> Index(string filter,int pageindex = 1, string sort = "Nome")
+        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sort = "Nome")
         {
             var resultado = _context.Pedidos.AsNoTracking()
                                 .AsQueryable();
@@ -40,7 +62,7 @@ namespace LanchesMac.Areas.Admin.Controllers
             }
 
             var model = await PagingList.CreateAsync(resultado, 5, pageindex, sort, "Nome");
-            model.RouteValue = new RouteValueDictionary { { "filter",filter } };
+            model.RouteValue = new RouteValueDictionary { { "filter", filter } };
 
             return View(model);
         }
@@ -169,14 +191,14 @@ namespace LanchesMac.Areas.Admin.Controllers
             {
                 _context.Pedidos.Remove(pedido);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PedidoExists(int id)
         {
-          return _context.Pedidos.Any(e => e.PedidoId == id);
+            return _context.Pedidos.Any(e => e.PedidoId == id);
         }
     }
 }

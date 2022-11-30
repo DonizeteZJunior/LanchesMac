@@ -1,4 +1,5 @@
-﻿using LanchesMac.Context;
+﻿using LanchesMac.Areas.Admin.Services;
+using LanchesMac.Context;
 using LanchesMac.Models;
 using LanchesMac.Repositories;
 using LanchesMac.Repositories.Interfaces;
@@ -27,6 +28,8 @@ public class Startup
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
+        services.Configure<ConfigurationImagens>(Configuration.GetSection("ConfigurationPastaImagens"));
+
         services.Configure<IdentityOptions>(options =>
         {
             //Default password settings
@@ -42,6 +45,7 @@ public class Startup
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
         services.AddTransient<IPedidoRepository, PedidoRepository>();
         services.AddScoped<ISeedUserRoInitial, SeedUserRoInitial>();
+        services.AddScoped<RelatorioVendasService>();
 
         services.AddAuthorization(options =>
         {
