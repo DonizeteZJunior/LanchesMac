@@ -10,13 +10,19 @@
     <div class="form-control">
         <div class="row col-12">
             <form method="get">
-                <input name="filter" class="form-group col-12 col-lg-8 col-md-8" placeholder="filtro" 
+                <input name="filter" class="form-group col-12 col-lg-6 col-md-6" placeholder="filtro" 
                         value="@Model.RouteValue["Filter"]" />
                 <button type="submit" class="form-group text-light btn btn-info col-6 col-lg-1 col-md-1">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>Procurar
                 </button>
                 <button class="btn btn-primary">
-                    <a asp-action="Create" class="text-decoration-none text-light" >+ Cadastrar</a>
+                    <a asp-action="Create" class="text-decoration-none text-light" >+ Cadastrar</a> 
+                </button>
+                <button class="btn btn-dark">
+                    <a asp-controller="AdminLanchesReport" class="text-decoration-none text-light" asp-action="LanchesCategoriaReport">Gerar Relatório</a>
+                </button>
+                <button class="btn btn-secondary">
+                    <a asp-controller="AdminLanchesReport" class="text-decoration-none text-light" asp-action="LanchesCategoriaPDF">Gerar PDF</a>
                 </button>
             </form>
         </div>
