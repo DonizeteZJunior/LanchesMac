@@ -42,8 +42,8 @@ namespace LanchesMac.Models
         {
             var carrinhoCompraItem = _context.CarrinhoCompraItens.SingleOrDefault(
                     s => s.Lanche.LancheId == lanche.LancheId &&
-                    s.CarrinhoCompraId == CarrinhoCompraId );
-            if(carrinhoCompraItem == null)
+                    s.CarrinhoCompraId == CarrinhoCompraId);
+            if (carrinhoCompraItem == null)
             {
                 carrinhoCompraItem = new CarrinhoCompraItem
                 {
@@ -67,7 +67,7 @@ namespace LanchesMac.Models
                 s.CarrinhoCompraId == CarrinhoCompraId);
 
 
-            if(carrinhoCompraItem != null)
+            if (carrinhoCompraItem != null)
             {
                 if (carrinhoCompraItem.Quantidade > 1)
                 {
@@ -83,11 +83,24 @@ namespace LanchesMac.Models
 
         public List<CarrinhoCompraItem> GetCarrinhoCompraItens()
         {
-            return CarrinhoCompraItems ??
-                   (CarrinhoCompraItems =
-                       _context.CarrinhoCompraItens.Where(c => c.CarrinhoCompraId == CarrinhoCompraId)
-                           .Include(s => s.Lanche)
-                           .ToList());
+            //return CarrinhoCompraItems ??
+            //       (CarrinhoCompraItems =
+            //           _context.CarrinhoCompraItens.Where(c => c.CarrinhoCompraId == CarrinhoCompraId)
+            //               .Include(s => s.Lanche)
+            //               .ToList());
+
+            if (CarrinhoCompraItems != null)
+            {
+                return CarrinhoCompraItems;
+            }
+            else
+            {
+                CarrinhoCompraItems = _context.CarrinhoCompraItens
+                                      .Where(c => c.CarrinhoCompraId == CarrinhoCompraId)
+                                      .Include(s => s.Lanche)
+                                      .ToList();
+                return CarrinhoCompraItems;
+            }
         }
 
         public void LimparCarrinho()
